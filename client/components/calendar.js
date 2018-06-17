@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react';
+import moment from 'moment';
 
-class Calendar extends React.Component {
+export default class Calendar extends React.Component {
   constructor(props) {
     super(props);
 
@@ -8,5 +9,11 @@ class Calendar extends React.Component {
       month: moment(),
       selected: moment().startOf('day')
     };
+  }
+
+  render() {
+    return (
+      <h2> My Calendar </h2>
+    )
   }
 }
