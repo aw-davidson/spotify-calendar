@@ -8,3 +8,16 @@
   display: grid;
   grid-template-columns: repeat(7, 50px);
 }
+
+.display-month {
+  color: #212121;
+}
+
+.trailing-month {
+  color: #b3b3b3;
+}
+
+.selected {
+  color: white;
+  background-color: #673AB7;
+}

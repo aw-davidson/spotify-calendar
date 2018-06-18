@@ -1,3 +1,7 @@
 {
-  "extends": "airbnb"
+  "root": true,
+  "extends": ["fullstack", "prettier", "prettier/react"],
+  "rules": {
+    "semi": 0
+  }
 }

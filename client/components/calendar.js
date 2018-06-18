@@ -10,7 +10,7 @@ export default class Calendar extends React.Component {
   state = {
     today: moment(),
     currentMonthYear: moment(),
-    selectDate: moment().startOf('day')
+    selectedDate: moment().startOf('day')
   }
 
   previousMonth = () => {
@@ -27,13 +27,13 @@ export default class Calendar extends React.Component {
     });
   }
 
-  selectDate(day) {
+  handleDayClick = (day) => {
     this.setState({
-      selectedDay: day.date,
-      month: day.date.clone(),
+      selectedDate: day
     });
   }
-  //should be a component by itself
+
+  //should be a component by itself ??
   renderMonthYearHeader = () => {
     return (
       <div className="month-year-header">
@@ -45,17 +45,28 @@ export default class Calendar extends React.Component {
   }
 
   renderWeeks = () => {
+
     const weeks = []
-    if (this.state.currentMonthYear) {
-      let startOfWeek = this.state.currentMonthYear.clone().startOf("month").add("w" - 1).day("Sunday");
+    let { currentMonthYear, selectedDate} = this.state;
+
+    if (currentMonthYear) {
+      let startOfWeek = currentMonthYear.clone().startOf("month").add("w" - 1).day("Sunday");
 
     //render 5 rows of weeks
     for (let i = 0; i < 5; i++) {
-      weeks.push(<Week key={startOfWeek.date()} startOfWeek={startOfWeek.clone()} />)
+      weeks.push(
+        <Week
+          key={startOfWeek.date()}
+          startOfWeek={startOfWeek.clone()}
+          handleDayClick={this.handleDayClick}
+          selectedDate={selectedDate}
+          currentMonthYear={currentMonthYear}
+        />
+      )
       startOfWeek.add(1, "w");
     }
     }
-    console.log('weeks', weeks)
+
     return weeks;
   }
 
@@ -83,16 +94,25 @@ const WeekDayHeader = () => {
 }
 
 const Week = (props) => {
-  const { startOfWeek } = props;
-  let days = [];
 
-  for (let i = 0; i < 7; i++) {
-    let day = {
-      number: startOfWeek.date(),
-    };
+  const { startOfWeek, handleDayClick, selectedDate, currentMonthYear } = props;
+  let currentDay = startOfWeek.clone();
+  const days = [];
 
-    days.push(<span key={day.number}>{day.number}</span>);
-    startOfWeek.add(1, "d");
+  for (let i = 0; days.length < 7; currentDay = currentDay.clone().add(1, "d")) {
+
+    let selected = currentDay.isSame(selectedDate) ? "selected" : "";
+    let displayMonth = currentDay.month() === currentMonthYear.month() ? "display-month" : "trailing-month";
+
+    days.push(
+      <span
+        key={currentDay.date()}
+        onClick={handleDayClick.bind(null, currentDay)}
+        className={`${selected} ${displayMonth}`}
+      >
+        {currentDay.date()}
+      </span>);
   }
+
   return days;
 }
