@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
+const moment = require('moment')
 
 const Event = db.define('event', {
   name: {
@@ -12,12 +13,12 @@ const Event = db.define('event', {
   startTime: {
     type: Sequelize.DATE,
     allowNull: false,
-    min: Date.now
+    min: Sequelize.NOW
   },
   endTime: {
     type: Sequelize.DATE,
     allowNull: false,
-    min: Date.now
+    min: Sequelize.NOW
   }
 })
 

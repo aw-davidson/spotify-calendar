@@ -1,5 +1,8 @@
 import React from 'react';
 import moment from 'moment';
+import axios from 'axios';
+import { EventForm } from './'
+
 
 export default class Calendar extends React.Component {
   constructor(props) {
@@ -10,7 +13,14 @@ export default class Calendar extends React.Component {
   state = {
     today: moment(),
     currentMonthYear: moment(),
-    selectedDate: moment().startOf('day')
+    selectedDate: moment().startOf('day'),
+    events: []
+  }
+
+  componentDidMount() {
+    axios.get('/api/events')
+      .then(res => res.data)
+      .then(events => this.setState({ events }));
   }
 
   previousMonth = () => {
@@ -33,6 +43,7 @@ export default class Calendar extends React.Component {
     });
   }
 
+
   //should be a component by itself ??
   renderMonthYearHeader = () => {
     return (
@@ -47,30 +58,33 @@ export default class Calendar extends React.Component {
   renderWeeks = () => {
 
     const weeks = []
-    let { currentMonthYear, selectedDate} = this.state;
+    let { currentMonthYear, selectedDate } = this.state;
 
     if (currentMonthYear) {
       let startOfWeek = currentMonthYear.clone().startOf("month").add("w" - 1).day("Sunday");
 
-    //render 5 rows of weeks
-    for (let i = 0; i < 5; i++) {
-      weeks.push(
-        <Week
-          key={startOfWeek.date()}
-          startOfWeek={startOfWeek.clone()}
-          handleDayClick={this.handleDayClick}
-          selectedDate={selectedDate}
-          currentMonthYear={currentMonthYear}
-        />
-      )
-      startOfWeek.add(1, "w");
-    }
+      //render 5 rows of weeks
+      for (let i = 0; i < 5; i++) {
+        weeks.push(
+          <Week
+            key={startOfWeek.date()}
+            startOfWeek={startOfWeek.clone()}
+            handleDayClick={this.handleDayClick}
+            selectedDate={selectedDate}
+            currentMonthYear={currentMonthYear}
+          />
+        )
+        startOfWeek.add(1, "w");
+      }
     }
 
     return weeks;
   }
 
   render() {
+
+    const { selectedDate } = this.state;
+    
     return (
       <div className="calendar-container">
         {this.renderMonthYearHeader()}
@@ -78,6 +92,7 @@ export default class Calendar extends React.Component {
         <div className="calendar">
           {this.renderWeeks()}
         </div>
+        <EventForm selectedDate={selectedDate}/>
       </div>
     )
   }
@@ -104,6 +119,8 @@ const Week = (props) => {
     let selected = currentDay.isSame(selectedDate) ? "selected" : "";
     let displayMonth = currentDay.month() === currentMonthYear.month() ? "display-month" : "trailing-month";
 
+
+
     days.push(
       <span
         key={currentDay.date()}
@@ -111,6 +128,7 @@ const Week = (props) => {
         className={`${selected} ${displayMonth}`}
       >
         {currentDay.date()}
+
       </span>);
   }
 
