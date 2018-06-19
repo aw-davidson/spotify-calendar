@@ -21,7 +21,7 @@ export default class EventForm extends React.Component {
   handleSubmit = (evt) => {
 
     evt.preventDefault();
-    const { selectedDate } = this.props;
+    const { selectedDate, addEventToCalendar } = this.props;
     let { startTime, endTime } = this.state;
 
     startTime = moment(this.state.startTime, 'HH-mm');
@@ -31,8 +31,9 @@ export default class EventForm extends React.Component {
     endTime = selectedDate.hour(endTime.get('hour')).minute(endTime.get('minute')).toDate();
 
     let event = Object.assign(this.state, { startTime, endTime });
-    axios.post('api/events', event)
-
+    axios.post('api/events', event);
+    addEventToCalendar(event);
+    
     this.setState({ isActive: false })
 
   }

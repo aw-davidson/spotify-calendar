@@ -23,6 +23,11 @@ export default class Calendar extends React.Component {
       .then(events => this.setState({ events }));
   }
 
+  //not necessary
+  addEventToCalendar = (event) => {
+    this.setState({events: [...this.state.events, event]})
+  }
+
   previousMonth = () => {
     const { currentMonthYear } = this.state;
     this.setState({
@@ -57,7 +62,7 @@ export default class Calendar extends React.Component {
   renderWeeks = () => {
 
     const weeks = []
-    let { currentMonthYear, selectedDate } = this.state;
+    let { currentMonthYear, selectedDate, events } = this.state;
 
     if (currentMonthYear) {
       let startOfWeek = currentMonthYear.clone().startOf("month").add("w" - 1).day("Sunday");
@@ -71,6 +76,7 @@ export default class Calendar extends React.Component {
             handleDayClick={this.handleDayClick}
             selectedDate={selectedDate}
             currentMonthYear={currentMonthYear}
+            events={events}
           />
         )
         startOfWeek.add(1, "w");
@@ -91,7 +97,7 @@ export default class Calendar extends React.Component {
         <div className="calendar">
           {this.renderWeeks()}
         </div>
-        <EventForm selectedDate={selectedDate}/>
+        <EventForm selectedDate={selectedDate} addEventToCalendar={this.addEventToCalendar}/>
       </div>
     )
   }
@@ -109,7 +115,7 @@ const WeekDayHeader = () => {
 
 const Week = (props) => {
 
-  const { startOfWeek, handleDayClick, selectedDate, currentMonthYear } = props;
+  const { startOfWeek, handleDayClick, selectedDate, currentMonthYear, events } = props;
   let currentDay = startOfWeek.clone();
   const days = [];
 
@@ -118,7 +124,11 @@ const Week = (props) => {
     let selected = currentDay.isSame(selectedDate) ? "selected" : "";
     let displayMonth = currentDay.month() === currentMonthYear.month() ? "display-month" : "trailing-month";
 
+    let currentDayEvents = events.filter((event) => {
+      return moment(event.startTime).date() === currentDay.date();
+    })
 
+    currentDayEvents.sort((a, b) => moment(a.startTime).isBefore( b.startTime) ? -1 : 1)
 
     days.push(
       <span
@@ -127,7 +137,7 @@ const Week = (props) => {
         className={`${selected} ${displayMonth}`}
       >
         {currentDay.date()}
-
+        <div>{currentDayEvents.map((event) => <p key={event.id}>{event.name}</p>)}</div>
       </span>);
   }
 
