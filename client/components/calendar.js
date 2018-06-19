@@ -43,7 +43,6 @@ export default class Calendar extends React.Component {
     });
   }
 
-
   //should be a component by itself ??
   renderMonthYearHeader = () => {
     return (
@@ -84,7 +83,7 @@ export default class Calendar extends React.Component {
   render() {
 
     const { selectedDate } = this.state;
-    
+
     return (
       <div className="calendar-container">
         {this.renderMonthYearHeader()}

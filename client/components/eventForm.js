@@ -5,6 +5,7 @@ import axios from 'axios';
 export default class EventForm extends React.Component {
 
   state = {
+    isActive: false,
     name: '',
     description: '',
     startTime: '', //time string format = '1:11' or '14:22' - parsed in handleSubmit
@@ -18,7 +19,7 @@ export default class EventForm extends React.Component {
   }
 
   handleSubmit = (evt) => {
-    
+
     evt.preventDefault();
     const { selectedDate } = this.props;
     let { startTime, endTime } = this.state;
@@ -29,37 +30,51 @@ export default class EventForm extends React.Component {
     endTime = moment(this.state.endTime, 'HH-mm');
     endTime = selectedDate.hour(endTime.get('hour')).minute(endTime.get('minute')).toDate();
 
-    let event = Object.assign(this.state, {startTime, endTime});
-
+    let event = Object.assign(this.state, { startTime, endTime });
     axios.post('api/events', event)
+
+    this.setState({ isActive: false })
 
   }
 
+  toggleForm = () => {
+    let isActive = this.state.isActive ? false : true;
+    this.setState({ isActive })
+  }
+
   render() {
-    const { name, description, startTime, endTime } = this.state;
+    const { isActive, name, description, startTime, endTime } = this.state;
     return (
-      <form method="post" action="/" id="form" className="validate">
-        <div className="form-field">
-          <label htmlFor="name">Name</label>
-          <input type="text" name="name" placeholder="(No Title)" value={name} onChange={this.handleFormChange} />
+      isActive ?
+        <div>
+          <span className="toggle-form-button" onClick={this.toggleForm}>+</span>
+          <form method="post" action="/" id="form" className="validate">
+            <div className="form-field">
+              <label htmlFor="name">Name</label>
+              <input type="text" name="name" placeholder="(No Title)" value={name} onChange={this.handleFormChange} />
+            </div>
+            <div className="form-field">
+              <label htmlFor="description">Description</label>
+              <input type="text" name="description" placeholder="(No Description)" value={description} onChange={this.handleFormChange} />
+            </div>
+            <div className="form-field">
+              <label htmlFor="startTime">Start time: </label>
+              <input type="time" name="startTime" onChange={this.handleFormChange} value={startTime} required />
+            </div>
+            <div className="form-field">
+              <label htmlFor="startTime">End time: </label>
+              <input type="time" name="endTime" min={startTime} onChange={this.handleFormChange} value={endTime} required />
+            </div>
+            <div className="form-field">
+              <label htmlFor=""></label>
+              <input type="submit" name="submit" value="Create event" onClick={this.handleSubmit} />
+            </div>
+          </form>
         </div>
-        <div className="form-field">
-          <label htmlFor="description">Description</label>
-          <input type="text" name="description" placeholder="(No Description)" value={description} onChange={this.handleFormChange} />
+        :
+        <div>
+          <span className="toggle-form-button" onClick={this.toggleForm}>+</span>
         </div>
-        <div className="form-field">
-          <label htmlFor="startTime">Start time: </label>
-          <input type="time" name="startTime" onChange={this.handleFormChange} value={startTime} required />
-        </div>
-        <div className="form-field">
-          <label htmlFor="startTime">End time: </label>
-          <input type="time" name="endTime" min={startTime} onChange={this.handleFormChange} value={endTime} required />
-        </div>
-        <div className="form-field">
-          <label htmlFor=""></label>
-          <input type="submit" name="submit" value="Create event" onClick={this.handleSubmit} />
-        </div>
-      </form>
     )
   }
 }
