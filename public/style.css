@@ -1,7 +1,7 @@
 .calendar {
   display: grid;
-  grid-template-columns: repeat(7, 50px);
-  grid-template-rows: repeat(6, 50px);
+  grid-template-columns: repeat(7, 100px);
+  grid-template-rows: repeat(6, 200px);
 }
 
 .week-day-header {

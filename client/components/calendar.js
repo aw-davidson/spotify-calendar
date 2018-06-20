@@ -25,7 +25,11 @@ export default class Calendar extends React.Component {
 
   //not necessary
   addEventToCalendar = (event) => {
-    this.setState({events: [...this.state.events, event]})
+    this.setState({ events: [...this.state.events, event] })
+  }
+
+  deleteEvent = (eventId) => {
+    axios.delete(`/api/events/${eventId}`)
   }
 
   previousMonth = () => {
@@ -77,6 +81,7 @@ export default class Calendar extends React.Component {
             selectedDate={selectedDate}
             currentMonthYear={currentMonthYear}
             events={events}
+            deleteEvent={this.deleteEvent}
           />
         )
         startOfWeek.add(1, "w");
@@ -97,7 +102,7 @@ export default class Calendar extends React.Component {
         <div className="calendar">
           {this.renderWeeks()}
         </div>
-        <EventForm selectedDate={selectedDate} addEventToCalendar={this.addEventToCalendar}/>
+        <EventForm selectedDate={selectedDate} addEventToCalendar={this.addEventToCalendar} />
       </div>
     )
   }
@@ -115,7 +120,7 @@ const WeekDayHeader = () => {
 
 const Week = (props) => {
 
-  const { startOfWeek, handleDayClick, selectedDate, currentMonthYear, events } = props;
+  const { startOfWeek, handleDayClick, selectedDate, currentMonthYear, events, deleteEvent } = props;
   let currentDay = startOfWeek.clone();
   const days = [];
 
@@ -125,21 +130,59 @@ const Week = (props) => {
     let displayMonth = currentDay.month() === currentMonthYear.month() ? "display-month" : "trailing-month";
 
     let currentDayEvents = events.filter((event) => {
-      return moment(event.startTime).date() === currentDay.date();
+      return moment(event.startTime).date() === currentDay.date() && moment(event.startTime).month() === currentDay.month() && moment(event.startTime).year() === currentDay.year();
     })
 
-    currentDayEvents.sort((a, b) => moment(a.startTime).isBefore( b.startTime) ? -1 : 1)
+    currentDayEvents.sort((a, b) => moment(a.startTime).isBefore(b.startTime) ? -1 : 1)
 
-    days.push(
+    days.push(<Day
+      selected={selected} displayMonth={displayMonth} currentDay={currentDay} handleDayClick={handleDayClick} currentDayEvents={currentDayEvents}
+    />
+    );
+  }
+
+  return days;
+}
+
+class Day extends React.Component {
+
+
+  state = {
+    events: this.props.currentDayEvents
+
+  }
+
+
+  deleteEvent = (eventId) => {
+    axios.delete(`/api/events/${eventId}`)
+    let events = this.state.events.filter((event) => eventId !== event.id)
+    console.log(events)
+    this.setState({ events })
+  }
+  
+  render() {
+    console.log(this.props.currentDayEvents)
+    let { selected, displayMonth, currentDay, handleDayClick, currentDayEvents } = this.props;
+
+
+
+    return (
       <span
         key={currentDay.date()}
         onClick={handleDayClick.bind(null, currentDay)}
         className={`${selected} ${displayMonth}`}
       >
         {currentDay.date()}
-        <div>{currentDayEvents.map((event) => <p key={event.id}>{event.name}</p>)}</div>
-      </span>);
+        <div>{currentDayEvents.map((event) => {
+          return (
+            <p>
+              <span key={event.id}>{event.name}</span>
+              <button onClick={() => this.deleteEvent(event.id)}>&times;</button>
+            </p>
+          )
+        })}
+        </div>
+      </span>
+    )
   }
-
-  return days;
 }

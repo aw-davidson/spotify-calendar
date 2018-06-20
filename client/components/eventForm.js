@@ -33,8 +33,15 @@ export default class EventForm extends React.Component {
     let event = Object.assign(this.state, { startTime, endTime });
     axios.post('api/events', event);
     addEventToCalendar(event);
-    
-    this.setState({ isActive: false })
+
+    this.setState({
+      isActive: false,
+      name: '',
+      description: '',
+      startTime: '', 
+      endTime: ''
+    }
+  )
 
   }
 
