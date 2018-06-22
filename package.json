@@ -37,6 +37,7 @@
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
     "eslint-plugin-react": "^7.9.1",
+    "morgan": "^1.9.0",
     "nodemon": "^1.17.5",
     "prettier-eslint": "^8.8.1",
     "webpack": "^4.12.0",
