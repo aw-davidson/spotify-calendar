@@ -12,12 +12,12 @@ const Day = (props) => {
     >
       {currentDay.date()}
       <div>{currentDayEvents.map((event) => {
-        let startTime = moment(event.startTime).format("hA")
-        let endTime = moment(event.endTime).format("hA")
+        let startTime = moment(event.startTime).format('hA')
+        let endTime = moment(event.endTime).format('hA')
         return (
           <p key={event.id} className="event">
             <span>{`${startTime}-${endTime} ${event.description}`}</span>
-            <button onClick={() => deleteEvent(event.id)}>&times;</button>
+            <button type="button" onClick={() => deleteEvent(event.id)}>&times;</button>
           </p>
         )
       })}
