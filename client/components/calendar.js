@@ -1,16 +1,15 @@
 import React from 'react';
 import moment from 'moment';
 import axios from 'axios';
-import { EventForm, Day, Week } from './'
+import { EventForm, Week } from '.';
 
 
 export default class Calendar extends React.Component {
-
-  state = {
-    currentMonthYear: moment(),
-    selectedDate: moment().startOf('day'),
-    events: []
-  }
+    state = {
+      currentMonthYear: moment(),
+      selectedDate: moment().startOf('day'),
+      events: [],
+    }
 
   componentDidMount() {
     axios.get('/api/events')
