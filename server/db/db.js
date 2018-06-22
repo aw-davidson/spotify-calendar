@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const pkg = require('../../package.json')
 
 const db = new Sequelize(
-  `postgres://localhost:5432/${pkg.name}`,
+  process.env.DATABASE_URL || `postgres://localhost:5432/${pkg.name}`,
   {
     logging: false
   }
