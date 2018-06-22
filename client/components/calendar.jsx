@@ -7,7 +7,7 @@ export default class Calendar extends React.Component {
   state = {
     currentMonthYear: moment(),
     selectedDate: moment().startOf('day'),
-    events: [],
+    events: []
   };
 
   componentDidMount() {
@@ -17,7 +17,7 @@ export default class Calendar extends React.Component {
       .then(events => this.setState({ events }));
   }
 
-  deleteEvent = (eventId) => {
+  deleteEvent = eventId => {
     axios.delete(`/api/events/${eventId}`).then(() => {
       let { events } = this.state;
       events = events.filter(event => eventId !== event.id);
@@ -25,8 +25,8 @@ export default class Calendar extends React.Component {
     });
   };
 
-  addEventToCalendar = (event) => {
-    axios.post('api/events', event).then((res) => {
+  addEventToCalendar = event => {
+    axios.post('api/events', event).then(res => {
       let { events } = this.state;
       events = [...events, res.data];
       this.setState({ events });
@@ -36,20 +36,20 @@ export default class Calendar extends React.Component {
   previousMonth = () => {
     const { currentMonthYear } = this.state;
     this.setState({
-      currentMonthYear: currentMonthYear.subtract(1, 'month'),
+      currentMonthYear: currentMonthYear.subtract(1, 'month')
     });
   };
 
   nextMonth = () => {
     const { currentMonthYear } = this.state;
     this.setState({
-      currentMonthYear: currentMonthYear.add(1, 'month'),
+      currentMonthYear: currentMonthYear.add(1, 'month')
     });
   };
 
-  handleDayClick = (day) => {
+  handleDayClick = day => {
     this.setState({
-      selectedDate: day,
+      selectedDate: day
     });
   };
 
@@ -75,7 +75,7 @@ export default class Calendar extends React.Component {
             currentMonthYear={currentMonthYear}
             events={events}
             deleteEvent={this.deleteEvent}
-          />,
+          />
         );
         startOfWeek.add(1, 'w');
       }
@@ -96,11 +96,12 @@ export default class Calendar extends React.Component {
             currentMonthYear={this.state.currentMonthYear}
           />
           <WeekDayHeader />
-          <div className="calendar">
-            {this.renderWeeks()}
-          </div>
+          <div className="calendar">{this.renderWeeks()}</div>
         </div>
-        <EventForm selectedDate={selectedDate} addEventToCalendar={this.addEventToCalendar} />
+        <EventForm
+          selectedDate={selectedDate}
+          addEventToCalendar={this.addEventToCalendar}
+        />
       </div>
     );
   }
@@ -108,28 +109,23 @@ export default class Calendar extends React.Component {
 
 const WeekDayHeader = () => (
   <div className="week-day-header">
-    {moment.weekdaysShort().map(weekday => (
-      <span key={weekday}>
-        {weekday}
-      </span>
-    ))}
+    {moment
+      .weekdaysShort()
+      .map(weekday => <span key={weekday}>{weekday}</span>)}
   </div>
 );
 
-const MonthYearHeader = (props) => {
+const MonthYearHeader = props => {
   const { previousMonth, nextMonth, currentMonthYear } = props;
   return (
     <div className="month-year-header">
       <span className="arrow" onClick={previousMonth}>
         &larr;
       </span>
-      <span>
-        {currentMonthYear.format('MMMM, YYYY')}
-      </span>
+      <span>{currentMonthYear.format('MMMM, YYYY')}</span>
       <span className="arrow" onClick={nextMonth}>
         &rarr;
       </span>
     </div>
   );
 };
-

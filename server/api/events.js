@@ -1,13 +1,13 @@
 const router = require('express').Router();
-const {Event} = require('../db/models');
+const { Event } = require('../db/models');
 const HttpError = require('../utils/HttpError');
 module.exports = router;
 
 router.get('/', (req, res, next) => {
   Event.findAll()
     .then(events => res.json(events))
-    .catch(next)
-})
+    .catch(next);
+});
 
 router.post('/', (req, res, next) => {
   Event.create(req.body)
@@ -26,13 +26,15 @@ router.param('id', (req, res, next, id) => {
 });
 
 router.put('/:id', (req, res, next) => {
-  req.requestedEvent.update(req.body)
+  req.requestedEvent
+    .update(req.body)
     .then(event => res.status(200).json(event))
     .catch(next);
 });
 
 router.delete('/:id', (req, res, next) => {
-  req.requestedEvent.destroy()
+  req.requestedEvent
+    .destroy()
     .then(() => res.sendStatus(204))
     .catch(next);
 });

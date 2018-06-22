@@ -53,7 +53,11 @@ export default class EventForm extends React.Component {
     const { isActive, description, startTime, endTime } = this.state;
     return isActive ? (
       <div className="event-form">
-        <button type="button" className="create-event-button" onClick={this.toggleForm}>
+        <button
+          type="button"
+          className="create-event-button"
+          onClick={this.toggleForm}
+        >
           <span>Create Event</span>
         </button>
         <form method="post" action="/" id="form" className="validate">
@@ -97,7 +101,11 @@ export default class EventForm extends React.Component {
       </div>
     ) : (
       <div className="event-form">
-        <button type="button" className="create-event-button" onClick={this.toggleForm}>
+        <button
+          type="button"
+          className="create-event-button"
+          onClick={this.toggleForm}
+        >
           <span>Create Event</span>
         </button>
       </div>
