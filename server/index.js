@@ -9,6 +9,7 @@ const db = require('./db')
 const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
 const app = express()
+const http = require('http');
 module.exports = app
 
 
@@ -74,4 +75,10 @@ if (require.main === module) {
 } else {
   createApp()
 }
+
+//for heroku
+setInterval(function() {
+  http.get("https://spotify-fellow-calendar.herokuapp.com/");
+  http.get('https://git.heroku.com/spotify-fellow-calendar.git');
+}, 300000);
 
