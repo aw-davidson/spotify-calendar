@@ -3,10 +3,6 @@ const db = require('../db')
 const moment = require('moment')
 
 const Event = db.define('event', {
-  name: {
-    type: Sequelize.STRING,
-    defaultValue: '(No title)'
-  },
   description: {
     type: Sequelize.TEXT,
   },
@@ -19,7 +15,7 @@ const Event = db.define('event', {
     type: Sequelize.DATE,
     allowNull: false,
     min: Sequelize.NOW
-  }
+  },
 })
 
 module.exports = Event;

@@ -6,7 +6,6 @@ export default class EventForm extends React.Component {
 
   state = {
     isActive: false,
-    name: '',
     description: '',
     startTime: '', //time string format = '1:11' or '14:22' - parsed in handleSubmit
     endTime: ''
@@ -31,17 +30,17 @@ export default class EventForm extends React.Component {
     endTime = selectedDate.hour(endTime.get('hour')).minute(endTime.get('minute')).toDate();
 
     let event = Object.assign(this.state, { startTime, endTime });
-    axios.post('api/events', event);
-    addEventToCalendar(event);
+
+     addEventToCalendar(event)
+
 
     this.setState({
       isActive: false,
-      name: '',
       description: '',
-      startTime: '', 
+      startTime: '',
       endTime: ''
     }
-  )
+    )
 
   }
 
@@ -51,27 +50,23 @@ export default class EventForm extends React.Component {
   }
 
   render() {
-    const { isActive, name, description, startTime, endTime } = this.state;
+    const { isActive, description, startTime, endTime } = this.state;
     return (
       isActive ?
-        <div>
-          <span className="toggle-form-button" onClick={this.toggleForm}>+</span>
+        <div className="event-form">
+        <button className="create-event-button" onClick={this.toggleForm}><span>Create Event</span></button>
           <form method="post" action="/" id="form" className="validate">
             <div className="form-field">
-              <label htmlFor="name">Name</label>
-              <input type="text" name="name" placeholder="(No Title)" value={name} onChange={this.handleFormChange} />
-            </div>
-            <div className="form-field">
               <label htmlFor="description">Description</label>
-              <input type="text" name="description" placeholder="(No Description)" value={description} onChange={this.handleFormChange} />
+              <input type="text" name="description" value={description} onChange={this.handleFormChange} />
             </div>
             <div className="form-field">
               <label htmlFor="startTime">Start time: </label>
-              <input type="time" name="startTime" onChange={this.handleFormChange} value={startTime} required />
+              <input type="time" name="startTime" onChange={this.handleFormChange} value={startTime} />
             </div>
             <div className="form-field">
               <label htmlFor="startTime">End time: </label>
-              <input type="time" name="endTime" min={startTime} onChange={this.handleFormChange} value={endTime} required />
+              <input type="time" name="endTime" onChange={this.handleFormChange} value={endTime} />
             </div>
             <div className="form-field">
               <label htmlFor=""></label>
@@ -80,8 +75,8 @@ export default class EventForm extends React.Component {
           </form>
         </div>
         :
-        <div>
-          <span className="toggle-form-button" onClick={this.toggleForm}>+</span>
+        <div className="event-form">
+          <button className="create-event-button" onClick={this.toggleForm}><span>Create Event</span></button>
         </div>
     )
   }
