@@ -7,7 +7,9 @@
     "build-client-watch": "webpack -w",
     "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
     "start-dev": "npm run build-client-watch & npm run start-server",
-    "start": "node server"
+    "start": "node server",
+    "postinstall": "npm run build",
+    "build": "webpack --progress --colors"
   },
   "author": "",
   "license": "ISC",
