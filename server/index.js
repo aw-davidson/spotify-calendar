@@ -74,8 +74,8 @@ if (require.main === module) {
 }
 
 //for heroku
-setInterval(function() {
-  http.get("http://spotify-fellow-calendar.herokuapp.com/");
-  http.get('http://git.heroku.com/spotify-fellow-calendar.git');
-}, 300000);
+// setInterval(function() {
+//   http.get("http://spotify-fellow-calendar.herokuapp.com/");
+//   http.get('http://git.heroku.com/spotify-fellow-calendar.git');
+// }, 300000);
 
