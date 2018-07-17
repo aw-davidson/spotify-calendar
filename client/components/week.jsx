@@ -12,6 +12,8 @@ const Week = props => {
     deleteEvent
   } = props;
   let currentDay = startOfWeek.clone();
+
+  //an array of day components
   const days = [];
 
   for (

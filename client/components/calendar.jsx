@@ -58,6 +58,8 @@ export default class Calendar extends React.Component {
     const { currentMonthYear, selectedDate, events } = this.state;
 
     if (currentMonthYear) {
+
+      //start of week is a moment - the Sunday of the current week
       const startOfWeek = currentMonthYear
         .clone()
         .startOf('month')

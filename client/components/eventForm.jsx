@@ -12,6 +12,7 @@ export default class EventForm extends React.Component {
   handleFormChange = evt => {
     const name = evt.target.name;
     const input = evt.target.value;
+    //es6 computed property names
     this.setState({ [name]: input });
   };
 
@@ -20,6 +21,7 @@ export default class EventForm extends React.Component {
     const { selectedDate, addEventToCalendar } = this.props;
     let { startTime, endTime } = this.state;
 
+    //converting to a moment
     startTime = moment(this.state.startTime, 'HH-mm');
     startTime = selectedDate
       .hour(startTime.get('hour'))
@@ -36,6 +38,7 @@ export default class EventForm extends React.Component {
 
     addEventToCalendar(event);
 
+    //reseting form
     this.setState({
       isActive: false,
       description: '',
